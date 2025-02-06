@@ -70,15 +70,19 @@ $app->configure('app');
 | route or middleware that'll be assigned to some specific routes.
 |
 */
-
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
-
+$app->routeMiddleware([
+    'jwt.auth' => App\Http\Middleware\JwtMiddleware::class,
+]);
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
-
+$app->routeMiddleware([
+    'role' => App\Http\Middleware\RoleMiddleware::class,
+]); 
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

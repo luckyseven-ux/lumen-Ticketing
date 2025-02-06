@@ -28,3 +28,8 @@ $router->get('tickets', 'TicketController@index');
 
 // Route untuk mendapatkan detail tiket berdasarkan ID
 $router->get('tickets/{id}', 'TicketController@show');
+
+$router->post('/login', 'AuthController@login');
+$router->post('/logout', ['middleware' => 'jwt.auth', 'uses' => 'AuthController@logout']);
+$router->get('/admin/dashboard', 
+            ['middleware' => 'role:admin', 'uses' => 'AdminController@dashboard']);
