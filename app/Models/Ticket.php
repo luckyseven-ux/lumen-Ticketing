@@ -1,12 +1,23 @@
 <?php
 
+// app/Models/Ticket.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    protected $table = 'tickets'; // Nama tabel di database
-    protected $fillable = ['title', 'description', 'status']; // Kolom yang bisa diisi
-    public $timestamps = true; // Aktifkan timestamps (created_at dan updated_at)
+    protected $table = 'tickets';
+    protected $fillable = ['user_id', 'title', 'description', 'event_type', 'status', 'available_seats', 'price'];
+    public $timestamps = true;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

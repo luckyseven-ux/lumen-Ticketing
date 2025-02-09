@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -68,21 +68,27 @@ $app->configure('app');
 | Next, we will register the middleware with the application. These can
 | be global middleware that run before and after each request into a
 | route or middleware that'll be assigned to some specific routes.
-|
+
+
+
 */
+
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
+class_alias('Tymon\JWTAuth\Facades\JWTAuth', 'JWTAuth');
+class_alias('Tymon\JWTAuth\Facades\JWTFactory', 'JWTFactory');
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
 $app->routeMiddleware([
     'jwt.auth' => App\Http\Middleware\JwtMiddleware::class,
+    'admin' => App\Http\Middleware\RoleMiddleware::class,
 ]);
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
-$app->routeMiddleware([
-    'role' => App\Http\Middleware\RoleMiddleware::class,
-]); 
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -112,7 +118,7 @@ $app->routeMiddleware([
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

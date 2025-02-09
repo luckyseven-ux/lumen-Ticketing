@@ -10,27 +10,28 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract,JWTSubject
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
+
     protected $table = 'users';
     protected $fillable = ['name', 'email', 'password', 'role'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey(); // Mengembalikan ID pengguna
-    }   
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id'); // Relasi ke model Ticket
+    }
+
     public function getJWTCustomClaims()
     {
         return []; // Klaim kustom (opsional)
     }
+
     public $timestamps = true;
-    protected $hidden = [
-        'password',
-    ];
-}
-class Ticket extends Model
-{
-    protected $table = 'tickets';
-    protected $fillable = ['created_at', 'updated_at'];
-    public $timestamps = true; // Pastikan timestamps diaktifkan
+    protected $hidden = ['password'];
 }

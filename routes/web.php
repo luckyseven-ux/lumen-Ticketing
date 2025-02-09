@@ -17,19 +17,31 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('user',function () use ($router) {
+$router->get('user', function () use ($router) {
     return 'hello-light';
-}); 
+});
 
-$router->post('tickets/create', 'TicketController@store');
+
 
 // Route untuk mendapatkan semua tiket
-$router->get('tickets', 'TicketController@index');
-
-// Route untuk mendapatkan detail tiket berdasarkan ID
-$router->get('tickets/{id}', 'TicketController@show');
-
 $router->post('/login', 'AuthController@login');
 $router->post('/logout', ['middleware' => 'jwt.auth', 'uses' => 'AuthController@logout']);
-$router->get('/admin/dashboard', 
-            ['middleware' => 'role:admin', 'uses' => 'AdminController@dashboard']);
+$router->get(
+    '/admin/dashboard',
+    ['middleware' => 'role:admin', 'uses' => 'AdminController@dashboard']
+);
+
+$router->group(['middleware' => 'admin'], function () use ($router) {
+    $router->post('/tickets/create', 'TicketController@store'); // Tambah tiket
+    $router->put('/tickets/update/{id}', 'TicketController@update'); // Update tiket
+    $router->delete('/tickets/{id}', 'TicketController@destroy'); // Hapus tiket
+});
+
+
+
+$router->group(['prefix' => 'orders', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/order    ', 'OrderController@index'); // Lihat pesanan user
+    $router->post('/order/create', 'OrderController@store'); // Pesan tiket
+    $router->put('/order/{id}/payment', 'OrderController@updatePayment'); // Konfirmasi pembayaran
+    $router->delete('/order/{id}', 'OrderController@cancel'); // Batalkan pesanan
+});

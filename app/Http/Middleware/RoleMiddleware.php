@@ -3,22 +3,19 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle($request, Closure $next, $role)
+    public function handle(Request $request, Closure $next)
     {
-        // Ambil pengguna yang sedang login
-        $user = auth()->user();
-
-        // Periksa apakah role pengguna sesuai
-        if ($user && $user->role === $role) {
-            return $next($request); // Lanjutkan request
+        // Periksa apakah user sudah login dan memiliki role 'admin'
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return $next($request);
         }
 
-        // Jika tidak sesuai, kembalikan error 403
-        return response()->json([
-            'message' => 'Anda tidak memiliki izin untuk mengakses resource ini.',
-        ], 403);
+        return response()->json(['message' => 'Akses ditolak! Hanya admin yang dapat mengelola tiket.'], Response::HTTP_FORBIDDEN);
     }
 }
