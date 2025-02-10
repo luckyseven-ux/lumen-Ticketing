@@ -39,6 +39,7 @@
         ]);
         //kurangi jumlah ticket yang ada
         $ticket->update(['avaiable_seats'=>$ticket->avaiable_seats-1]);
+        
         return response()->json(['message'=>'Your Ticket Booked Succesfully !!']);
     }
 

@@ -40,8 +40,8 @@ $router->group(['middleware' => 'admin'], function () use ($router) {
 
 
 $router->group(['prefix' => 'orders', 'middleware' => 'auth'], function () use ($router) {
-    $router->get('/order    ', 'OrderController@index'); // Lihat pesanan user
-    $router->post('/order/create', 'OrderController@store'); // Pesan tiket
-    $router->put('/order/{id}/payment', 'OrderController@updatePayment'); // Konfirmasi pembayaran
-    $router->delete('/order/{id}', 'OrderController@cancel'); // Batalkan pesanan
+    $router->get('/', 'OrderController@index'); // Lihat pesanan user
+    $router->post('/create', 'OrderController@store'); // Pesan tiket
+    $router->put('/{id}/payment', 'OrderController@updatePayment'); // Konfirmasi pembayaran
+    $router->delete('/{id}', 'OrderController@cancel'); // Batalkan pesanan
 });

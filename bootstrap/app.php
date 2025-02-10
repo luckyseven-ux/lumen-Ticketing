@@ -74,9 +74,10 @@ $app->configure('app');
 */
 
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->configure('auth');
+$app->middleware([
+    App\Http\Middleware\ExampleMiddleware::class
+]);
 class_alias('Tymon\JWTAuth\Facades\JWTAuth', 'JWTAuth');
 class_alias('Tymon\JWTAuth\Facades\JWTFactory', 'JWTFactory');
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
@@ -84,6 +85,7 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->routeMiddleware([
     'jwt.auth' => App\Http\Middleware\JwtMiddleware::class,
     'admin' => App\Http\Middleware\RoleMiddleware::class,
+    'auth' => App\Http\Middleware\Authenticate::class,
 ]);
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
