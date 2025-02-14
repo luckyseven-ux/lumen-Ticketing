@@ -45,3 +45,7 @@ $router->group(['prefix' => 'orders', 'middleware' => 'auth'], function () use (
     $router->put('/{id}/payment', 'OrderController@updatePayment'); // Konfirmasi pembayaran
     $router->delete('/{id}', 'OrderController@cancel'); // Batalkan pesanan
 });
+
+$router->group(['prefix'=>'payment','middleware'=>'auth'],function() use($router){
+    $router->post('/create','PaymentController@store');
+});
